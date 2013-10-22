@@ -1,0 +1,17 @@
+Lab1a
+
+Name 1: Rohan Chitalia (804032423)
+Name 2: Matt Nguyen (804037897)
+
+Our implementation for the parser itself was somewhat straightfoward. A while loop 
+went through and read every character in the input, while we had a large switch 
+statement inside which decided how/where to parse. Several conditionals were used 
+to cover all of the valid/invalid test cases. In the end, we formed and array of 
+complete commands, each which consisted of an array of words (simple commands or
+operators). Each of these were character arrays. We recursivley went through each
+complete command and formed a tree based on the precedence of operators. Lastly,
+our function read_command_stream returns a pointer to a complete_command tree every
+time it is called.
+
+Lab1b
+Our implementation for the command executer relied heavily on our implementation of the command tree in part 1a. The main execute_command function was simply a switch statement for all of the different command types. The simple command handled all redirect cases via dup2 and finally ran execvp on the command. AND_COMMANDS wait for the first command to finish, and then execute the second one based on the return status of the first. Likewise for OR_COMMANDS. Sequence commands execute the first and the second regardless of the status. The pipe command uses pip() and dup2. Sequence commands just recursively call execute_command on the sequence. Every function returns a status. We had some issues at first with the dup2 involving open and closing files, but were able to fix it.
