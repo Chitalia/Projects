@@ -1,0 +1,9 @@
+#1
+echo hi && ls | grep read && echo bye
+
+
+#2
+(echo hello) || echo bye
+
+#3
+(((ls -l > info.txt) && echo worked) || mkdir wefuckedup) && echo rohan ;echo is; true

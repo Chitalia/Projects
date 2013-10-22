@@ -1,0 +1,45 @@
+#1
+echo hi && ls | grep matt && echo bye
+
+#2
+(echo hello) || (echo bye)
+
+#3
+(((ls -l > info.txt) && echo worked) || mkdir wefuckedup) && echo rohan ;echo is; true
+
+#helloooooooooooooooo
+#helllloooooooooooooooo
+echo matt \
+|| echo is > info.txt | (echo a ; echo ghee && (ls -l | wc -l))
+
+#4
+(echo sweet)
+
+(echo nuggets)
+
+
+echo nice || echo thisdoesnotprint
+
+#ls
+
+
+#why
+echo good && echo work;
+
+echo nice || echo thisdoesnotprint
+
+#ls
+
+(sort <name.txt>  textext.txt ) && (ls) #this is gay
+#this is gay
+
+(ls) | (grep read)
+#ls
+
+((echo FINISH))  #YEEE
+
+(sort < name.txt | tr a-z A-Z | wc) #SLDKJFLSKD
+
+
+(((echo FINISH)))
+#helllooooooooo
