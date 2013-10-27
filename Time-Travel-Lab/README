@@ -1,7 +1,7 @@
 Lab1a
 
-Name 1: Rohan Chitalia (804032423)
-Name 2: Matt Nguyen (804037897)
+Name 1: Rohan Chitalia 
+Name 2: Matt Nguyen 
 
 Our implementation for the parser itself was somewhat straightfoward. A while loop 
 went through and read every character in the input, while we had a large switch 
