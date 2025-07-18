@@ -91,143 +91,19 @@ int BadPlayerImpl::chooseMove(const Scaffold& s, int N, int color)
 }
 
 
-bool checkD1(const Scaffold& s, int n, int nColor)
+bool checkDirection(const Scaffold& s, int n, int nColor, int dx, int dy)
 {
-    if (s.rows() == 1 || s. cols() == 1)     //if there are only 1 row or 1 column, no need to check for diagonal
+    if ((dx == 0 && s.cols() == 1) || (dy == 0 && s.rows() == 1) || (s.rows() == 1 && s.cols() == 1))
         return false;
+    
     int count = 0;
     for (int i = 1; i < s.cols() + 1; i++)
     {
-        for (int j = 1; j < s.rows() + 1; j++)    //traverse through the rows and colums
+        for (int j = 1; j < s.rows() + 1; j++)
         {
             if (s.checker(i, j) == nColor)
             {
-                int color = s.checker(i, j);   //save the color of the current piece, and set count to 1
-                count = 1;
-                if (n == count)
-                {
-                    return true;
-                }
-                for (int k = 1; k < n; k++)   //look for N in a row of the type color
-                {
-                    if ( (k + i) < s.cols()+1 && (k + j) < s.rows()+1)   //make sure that the location your are checking is actually in the scaffold
-                    {
-                        if (s.checker(k + i, k + j) == color)
-                        {
-                            count++;
-                            if (count == n)   //if at any point you have N in a row, save the color of the type and return true
-                            {
-                                return true;
-                            }
-                        }
-                        else
-                            break;
-                    }
-                }
-            }
-        }
-    }
-    return false;   //if it reaches here, there are NOT N in a row
-}
-
-
-
-
-bool checkD2(const Scaffold& s, int n, int nColor) 
-{
-    if (s.rows() == 1 || s. cols() == 1)  //if there are only 1 row or 1 column, no need to check for diagonal
-        return false;
-    int count = 0;
-    for (int i = 1; i < s.cols()+1; i++)
-    {
-        for (int j = 1; j < s.rows() + 1; j++)   //traverse through the rows and colums
-        {
-            if (s.checker(i, j) == nColor)
-            {
-                int color = s.checker(i, j);    //save the color of the current piece, and set count to 1
-                count = 1;
-                if (n == count)
-                {
-                    return true;
-                }
-                for (int k = 1; k < n; k++)    //look for N in a row of the type color
-                {
-                    if ( (i - k) > 0 && (j + k) < s.rows()+1)    //make sure that the location your are checking is actually in the scaffold
-                    {
-                        if (s.checker(i - k, j + k) == color)
-                        {
-                            count++;
-                            if (count == n)     //if at any point you have N in a row, save the color of the type and return true
-                            {
-                                return true;
-                            }
-                        }
-                        else
-                            break;
-                    }
-                }
-            }
-        }
-    }
-    return false;   //if it reaches here, there are NOT N in a row
-}
-
-
-
-
-bool checkH(const Scaffold& s, int n, int nColor) 
-{
-    if (s. cols() == 1)   //if there is only 1 column, no need to check for horizontal
-        return false;
-    int count = 0;
-    for (int i = 1; i < s.cols() + 1; i++)
-    {
-        for (int j = 1; j < s.rows() + 1; j++)   //traverse through the rows and colums
-        {
-            if (s.checker(i, j) == nColor)
-            {
-                int color = s.checker(i, j);   //save the color of the current piece, and set count to 1
-                count = 1;
-                if (n == count)
-                {
-                    return true;
-                }
-                for (int k = 1; k < n; k++)  
-                {
-                    if ((k + i) < s.cols() + 1)    //make sure that the location your are checking is actually in the scaffold
-                    {
-                        if (s.checker(k + i, j) == color)
-                        {
-                            count ++;
-                            if (count == n)   //if at any point you have N in a row, save the color of the type and return true
-                            {
-                                return true;
-                            }
-                        }
-                        else
-                            break;
-                    }
-                }
-            }
-        }
-    }
-    return false;   //if it reaches here, there are NOT N in a row
-}
-
-
-
-bool checkV(const Scaffold& s, int n, int nColor)
-{
-    if (s.rows() == 1)   //if there is only 1 row, no need to check for any vertical
-        return false;
-    int count = 0;
-    for (int i = 1; i < s.cols() + 1; i++)
-    {
-        for (int j = 1; j < s.rows() + 1; j++)   //traverse through the rows and colums
-        {
-            if (s.checker(i, j) == nColor)
-            {
-                int color = s.checker(i, j);   //save the color of the current piece, and set count to 1
+                int color = s.checker(i, j);
                 count = 1;
                 if (n == count)
                 {
@@ -235,12 +111,14 @@ bool checkV(const Scaffold& s, int n, int nColor)
                 }
                 for (int k = 1; k < n; k++)
                 {
-                    if ((k + j) < s.rows() + 1)  //make sure that the location your are checking is actually in the scaffold
+                    int newI = i + k * dx;
+                    int newJ = j + k * dy;
+                    if (newI >= 1 && newI <= s.cols() && newJ >= 1 && newJ <= s.rows())
                     {
-                        if (s.checker(i, k + j) == color)
+                        if (s.checker(newI, newJ) == color)
                         {
-                            count ++;
-                            if (count == n)   //if at any point you have N in a row, save the color of the type and return true
+                            count++;
+                            if (count == n)
                             {
                                 return true;
                             }
@@ -248,26 +126,28 @@ bool checkV(const Scaffold& s, int n, int nColor)
                         else
                             break;
                     }
+                    else
+                        break;
                 }
             }
         }
     }
-    return false;   //if it reaches here, there are NOT N in a row
+    return false;
 }
 
 
 
 int SmartPlayerImpl::ratingFunction(Scaffold& temp, int N, bool isHuman, int nColor)
 {
-    if (isHuman && (checkV(temp, N, nColor) || checkH(temp, N, nColor) || checkD1(temp, N, nColor) || checkD2(temp, N, nColor))) //check if the computer won and then return 1
+    if (isHuman && (checkDirection(temp, N, nColor, 0, 1) || checkDirection(temp, N, nColor, 1, 0) || checkDirection(temp, N, nColor, 1, 1) || checkDirection(temp, N, nColor, 1, -1))) //check if the computer won and then return 1
     {
         return 1; 
     }
-     else if (!isHuman && (checkV(temp, N, nColor) || checkH(temp, N, nColor) || checkD1(temp, N, nColor) || checkD2(temp, N, nColor)))
+     else if (!isHuman && (checkDirection(temp, N, nColor, 0, 1) || checkDirection(temp, N, nColor, 1, 0) || checkDirection(temp, N, nColor, 1, 1) || checkDirection(temp, N, nColor, 1, -1)))
     {
         return -1;
     }
-    else if (!(checkV(temp, N, nColor) || checkH(temp, N, nColor) || checkD1(temp, N, nColor) || checkD2(temp, N, nColor)) && temp.numberEmpty() == 0) //check if it is a tie game and then return 0
+    else if (!(checkDirection(temp, N, nColor, 0, 1) || checkDirection(temp, N, nColor, 1, 0) || checkDirection(temp, N, nColor, 1, 1) || checkDirection(temp, N, nColor, 1, -1)) && temp.numberEmpty() == 0) //check if it is a tie game and then return 0
     {
         return 0;
     }
